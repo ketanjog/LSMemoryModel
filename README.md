@@ -1,7 +1,7 @@
 # LSMemoryModel
 A codebase that allows you to play with different online learning algorithms that model memory 
 
-## How to install:
+### How to install:
 Run the following sequence of all commands
 ```
 make virtulenv
@@ -12,7 +12,7 @@ pre-commit install
 This should create a virtual env called venv, install all dependencies,
 install the package and activate the created virtual environment.
 
-# How to use pre-commit
+### How to use pre-commit
 `pre-commit` will run automatically as a hook so every commit will need
 to adhere to the linter. Use the following work-stream. 
 Assume there are files `file.txt` and `script.py`. Then the workflow is

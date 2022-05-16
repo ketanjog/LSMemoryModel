@@ -29,7 +29,7 @@ install: virtualenv
 
 uninstall:
 	@echo "Uninstalling LSMemoryModel in the system"
-	$(VENV_PIP) uninstall effhe
-	@echo "Succesfully uninstalled effhe"
+	$(VENV_PIP) uninstall LSMemoryModel
+	@echo "Succesfully uninstalled LSMemorLSMemoryModell"
 
 FORCE: ;

@@ -48,8 +48,8 @@ class DualWeights(BaseAlgo):
         Updates the weight of the chosen action
         using the exponential learning rule.
         """
-        self.ltm_weights[self.last_action] *= math.exp(-self.ltm_learning_rate*(1-reward))
-        self.stm_weights[self.last_action] *= math.exp(-self.stm_learning_rate*(1- reward))
+        self.ltm_weights[self.last_action] *= math.exp(self.ltm_learning_rate*(reward))
+        self.stm_weights[self.last_action] *= math.exp(-self.stm_learning_rate*(1-reward))
         
         # Renormalise
         self.ltm_weights /= torch.sum(self.ltm_weights)

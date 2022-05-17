@@ -39,6 +39,7 @@ class ExpWeights(BaseAlgo):
         using the exponential learning rule.
         """
         self.weights[self.last_action] *= math.exp(-self.learning_rate*(1- reward))
+        #self.weights[self.last_action] *= math.exp(self.learning_rate*(reward))
         
         # Renormalise
         self.weights /= torch.sum(self.weights)

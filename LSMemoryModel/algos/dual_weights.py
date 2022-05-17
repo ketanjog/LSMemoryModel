@@ -21,6 +21,7 @@ class DualWeights(BaseAlgo):
         self.ltm_learning_rate = ltm_learning_rate
         self.stm_learning_rate = stm_learning_rate
         self.last_action = None
+        self.prev_reward = 1
 
 
     
@@ -37,6 +38,13 @@ class DualWeights(BaseAlgo):
         # Additive agreement
         # weights = self.ltm_weights + self.stm_weights
 
+        # Max agreement
+        # weights = torch.maximum(self.stm_weights, self.ltm_weights)
+
+        # Max gated agreement
+        # weights = torch.maximum(self.stm_weights, (1- self.prev_reward) * self.ltm_weights)
+
+
         max_inds, = torch.where(weights == weights.max())
         
         self.last_action = np.random.choice(max_inds)
@@ -48,12 +56,14 @@ class DualWeights(BaseAlgo):
         Updates the weight of the chosen action
         using the exponential learning rule.
         """
-        self.ltm_weights[self.last_action] *= math.exp(self.ltm_learning_rate*(reward))
+        self.ltm_weights[self.last_action] *= math.exp(-self.ltm_learning_rate*(1-reward))
         self.stm_weights[self.last_action] *= math.exp(-self.stm_learning_rate*(1-reward))
+            
         
         # Renormalise
         self.ltm_weights /= torch.sum(self.ltm_weights)
         self.stm_weights /= torch.sum(self.stm_weights)
+        self.prev_reward = reward
         
 
         

@@ -8,13 +8,15 @@ T = 10000
 
 # Constants for the Algorithm
 # To get optimum regret. Set learning rate to be sqrt(2 * log(num_actions) / T)
-stm_learning_rate = math.sqrt(2 * math.log(num_actions) / T)
-ltm_learning_rate = stm_learning_rate 
+# stm_learning_rate = math.sqrt(2 * math.log(num_actions) / T)
+stm_learning_rate = 1
+ltm_learning_rate = stm_learning_rate / 100
 
 algo = DualWeights(stm_learning_rate, ltm_learning_rate)
 env = DiscreteEnv(T, algo)
 
 env.train()
+
 
 
 

@@ -7,6 +7,8 @@ import numpy as np
 from LSMemoryModel.constants.discrete import context_epsilon, action_epsilon
 from LSMemoryModel.data.discrete_context import DISCRETE_CONTEXT
 from LSMemoryModel.envs.base_env import BaseEnv
+from LSMemoryModel.algos.policy_gradient import PolicyGradient
+
 
 
 class DiscreteEnv(BaseEnv):
@@ -18,6 +20,13 @@ class DiscreteEnv(BaseEnv):
         self.rewards = []
         self.cum_rewards = [0]
         self.t = 0
+
+        if isinstance(self.algo, PolicyGradient):
+            self.reward_type = {"OPT" : 1, "OTHER" : -1}
+        else:
+            self.reward_type = {"OPT" : 1, "OTHER" : 0}
+
+        self.prob_dist = self.algo.action_probs
 
     def reset_context(self):
         """
@@ -38,10 +47,9 @@ class DiscreteEnv(BaseEnv):
         self.t += 1
 
         if max(np.random.uniform(0,1), 1 if self.optimal_action == action else 0) > (1-action_epsilon):
-            return 1
+            return self.reward_type["OPT"]
         
-        return 0
-        # return -1
+        return self.reward_type["OTHER"]
 
     def update(self, r):
         """

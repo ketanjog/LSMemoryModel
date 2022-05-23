@@ -60,7 +60,7 @@ class DualWeights(BaseAlgo):
         self.stm_weights[self.last_action] *= math.exp(-self.stm_learning_rate*(1-reward))
             
         
-        # Renormalise
+        # Renormalise 
         self.ltm_weights /= torch.sum(self.ltm_weights)
         self.stm_weights /= torch.sum(self.stm_weights)
         self.prev_reward = reward

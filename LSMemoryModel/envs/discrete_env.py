@@ -3,23 +3,23 @@ A class that produces context of a number c between [0, 2, ..., C-1]
 """
 
 import numpy as np
-
-from LSMemoryModel.constants.discrete import context_epsilon, action_epsilon
-from LSMemoryModel.data.discrete_context import DISCRETE_CONTEXT
+from LSMemoryModel.data.discrete_context import get_discrete_context
 from LSMemoryModel.envs.base_env import BaseEnv
 from LSMemoryModel.algos.policy_gradient import PolicyGradient
 
 
 
 class DiscreteEnv(BaseEnv):
-    def __init__(self, T, algo):
-        super().__init__(T)
-        self.data = DISCRETE_CONTEXT
+    def __init__(self, T, algo, context_epsilon, action_epsilon, num_actions, num_contexts):
+        super().__init__(T, num_actions)
+        self.data = get_discrete_context(num_actions, num_contexts)
         self.algo = algo
         self.reset_context()
         self.rewards = []
         self.cum_rewards = [0]
         self.t = 0
+        self.action_epsilon = action_epsilon
+        self.context_epsilon = context_epsilon
 
         if isinstance(self.algo, PolicyGradient):
             self.reward_type = {"OPT" : 1, "OTHER" : -1}
@@ -34,9 +34,10 @@ class DiscreteEnv(BaseEnv):
         """
         _ = {"context": 0, "optimal_action": 1}
 
-        idx = np.random.randint(len(DISCRETE_CONTEXT[_["context"]]))
+        idx = np.random.randint(len(self.data[_["context"]]))
         self.context = self.data[_["context"]][idx]
         self.optimal_action = self.data[_["optimal_action"]][idx]
+        #print("CHANGE")
 
     def step(self, action):
         """
@@ -46,7 +47,11 @@ class DiscreteEnv(BaseEnv):
         """
         self.t += 1
 
-        if max(np.random.uniform(0,1), 1 if self.optimal_action == action else 0) > (1-action_epsilon):
+        # if self.t % 5 == 0:
+        #         print("prob: " + str(self.algo.print))
+
+
+        if max(np.random.uniform(0,1), 1 if self.optimal_action == action else 0) >= (1-self.action_epsilon):
             return self.reward_type["OPT"]
         
         return self.reward_type["OTHER"]
@@ -55,7 +60,7 @@ class DiscreteEnv(BaseEnv):
         """
         At every timestep, context changes with probability context_epsilon
         """
-        if np.random.uniform(0, 1) < context_epsilon:
+        if np.random.uniform(0, 1) < self.context_epsilon:
             self.reset_context()
 
         self.rewards.append(r)

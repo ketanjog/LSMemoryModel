@@ -4,9 +4,9 @@ from LSMemoryModel.constants.discrete import num_actions
 import math
 
 # Constants for the Environment
-T = 10000
-context_epsilon = 0.01
-action_epsilon = 0.01
+T = 1000
+context_epsilon = 0.1
+action_epsilon = 0
 num_contexts = 5
 
 
@@ -15,11 +15,12 @@ num_contexts = 5
 # stm_learning_rate = math.sqrt(2 * math.log(num_actions) / T)
 stm_learning_rate = 1
 ltm_learning_rate = 0.01
-num_actions = 100
+num_actions = 10
+beta = 1
 
-algo = PolicyGradient(stm_learning_rate,num_actions)
-#algo = DualPolicyGradient(stm_learning_rate, ltm_learning_rate)
-env = DiscreteEnv(T, algo, context_epsilon, action_epsilon, num_actions, num_contexts)
+algo = PolicyGradient(stm_learning_rate,num_actions,beta)
+#algo = DualPolicyGradient(stm_learning_rate, ltm_learning_rate, num_actions)
+env = DiscreteEnv(T, algo, context_epsilon, action_epsilon, num_actions, num_contexts, visual=True)
 
 env.train()
 

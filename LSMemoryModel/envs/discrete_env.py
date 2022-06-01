@@ -10,8 +10,8 @@ from LSMemoryModel.algos.policy_gradient import PolicyGradient
 
 
 class DiscreteEnv(BaseEnv):
-    def __init__(self, T, algo, context_epsilon, action_epsilon, num_actions, num_contexts):
-        super().__init__(T, num_actions)
+    def __init__(self, T, algo, context_epsilon, action_epsilon, num_actions, num_contexts, visual):
+        super().__init__(T, num_actions, visual)
         self.data = get_discrete_context(num_actions, num_contexts)
         self.algo = algo
         self.reset_context()

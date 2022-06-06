@@ -74,14 +74,26 @@ class PolicyGradient(BaseAlgo):
         # print("--------------------------")
         # print("ACTION PR: " + str(self.action_probs))
 
-class DualPolicyGradient(PolicyGradient):
-    def __init__(self, stm_learning_rate, ltm_learning_rate, num_actions, run_id=None):
-        super().__init__(stm_learning_rate, num_actions, run_id)
-        self.name = "policy_gradient"
+class DualPolicyGradient(BaseAlgo):
+    def __init__(
+        self, stm_learning_rate, 
+        ltm_learning_rate, 
+        num_actions, 
+        beta_stm, 
+        beta_ltm, 
+        run_id=None
+        ):
+
+        super().__init__(run_id)
+        self.name = "dual_policy_gradient"
+
+
+        self.num_actions = num_actions
+        # Short Term Memory Weights (Try random seeding)
+        self.stm_weights = torch.zeros(self.num_actions)
 
         # LTM Weights (Try random seeding)
-        self.ltm_weights = torch.ones(self.num_actions)
-        # self.stm_weights /= torch.sum(self.stm_weights)
+        self.ltm_weights = torch.zeros(self.num_actions)
 
         # Probabilities of taking each action
         self.s_action_probs = torch.ones(self.num_actions)
@@ -101,7 +113,8 @@ class DualPolicyGradient(PolicyGradient):
 
         self.last_action = None
 
-        self.beta = 10
+        self.beta_ltm = beta_ltm
+        self.beta_stm = beta_stm
 
 
     
@@ -129,12 +142,14 @@ class DualPolicyGradient(PolicyGradient):
             return indicator
 
         # Update the value function
-        self.stm_weights += self.stm_learning_rate * reward * _I(self.last_action)
-        self.stm_weights[self.stm_weights > 5] = 5
+        # self.stm_weights += self.stm_learning_rate * reward * _I(self.last_action)
+        self.stm_weights += self.stm_learning_rate * (reward - self.stm_weights) * _I(self.last_action)
+        # self.stm_weights[self.stm_weights > 5] = 5
 
-        self.ltm_weights += self.ltm_learning_rate * reward * _I(self.last_action)
+        # self.ltm_weights += self.ltm_learning_rate * reward * _I(self.last_action)
+        self.ltm_weights += self.ltm_learning_rate * (reward - self.ltm_weights) * _I(self.last_action)
 
         # Update the action probabilities
-        self.s_action_probs = torch.nn.functional.normalize(torch.exp(self.stm_weights), dim=0,p=1)
-        self.l_action_probs = torch.nn.functional.normalize(torch.exp(self.beta*self.ltm_weights), dim=0,p=1)
+        self.s_action_probs = torch.nn.functional.normalize(torch.exp(self.beta_stm*self.stm_weights), dim=0,p=1)
+        self.l_action_probs = torch.nn.functional.normalize(torch.exp(self.beta_ltm*self.ltm_weights), dim=0,p=1)
 

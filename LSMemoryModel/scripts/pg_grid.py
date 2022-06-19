@@ -22,8 +22,7 @@ action_epsilon_negative_params = [0.01, 0.05, 0.1]
 num_actions_params = [10, 100, 1000]
 num_contexts_params = [1, 2, 5, 10]
 
-#stm_learning_rate_params = [0.001, 0.01, 0.1, 0.5]
-stm_learning_rate_params = [0.1, 0.5]
+stm_learning_rate_params = [0.001, 0.01, 0.1, 0.5]
 # ltm_learning_rate_ratio_params = [0, 0.001, 0.01, 0.1]
 ltm_learning_rate_ratio_params = [sys.argv[1]]
 

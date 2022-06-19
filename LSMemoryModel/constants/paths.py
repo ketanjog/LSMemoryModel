@@ -11,6 +11,6 @@ DATA_PATH = os.path.join(ROOT_PATH, "data")
 ETC_PATH = os.path.join(ROOT_PATH, "etc")
 
 # object dump path
-OBJECT_DUMP_PATH = os.path.join(ETC_PATH, "object_dump")
+OBJECT_DUMP_PATH = os.path.join(ETC_PATH, "object_dump/ltm_run/")
 FIGURES_PATH = os.path.join(ETC_PATH, "figures")
 

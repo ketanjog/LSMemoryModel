@@ -10,7 +10,16 @@ from LSMemoryModel.algos.policy_gradient import PolicyGradient
 
 
 class DiscreteEnv(BaseEnv):
-    def __init__(self, T, algo, context_epsilon, action_epsilon, num_actions, num_contexts, visual):
+    def __init__(
+        self, 
+        T, 
+        algo, 
+        context_epsilon, 
+        action_postive_epsilon, 
+        action_negative_epsilon, 
+        num_actions, 
+        num_contexts, 
+        visual):
         super().__init__(T, num_actions, visual)
         self.data = get_discrete_context(num_actions, num_contexts)
         self.algo = algo
@@ -18,7 +27,8 @@ class DiscreteEnv(BaseEnv):
         self.rewards = []
         self.cum_rewards = [0]
         self.t = 0
-        self.action_epsilon = action_epsilon
+        self.action_postive_epsilon = action_postive_epsilon
+        self.action_negative_epsilon = action_negative_epsilon
         self.context_epsilon = context_epsilon
 
         if isinstance(self.algo, PolicyGradient):
@@ -50,11 +60,25 @@ class DiscreteEnv(BaseEnv):
         # if self.t % 5 == 0:
         #         print("prob: " + str(self.algo.print))
 
+        if self.optimal_action == action:
+            if np.random.uniform(0,1) > self.action_negative_epsilon:
+                return self.reward_type["OPT"]
+            else:
+                return self.reward_type["OTHER"]
 
-        if max(np.random.uniform(0,1), 1 if self.optimal_action == action else 0) >= (1-self.action_epsilon):
-            return self.reward_type["OPT"]
+        else:
+            if np.random.uniform(0,1) > self.action_postive_epsilon:
+                return self.reward_type["OTHER"]
+            else:
+                return self.reward_type["OPT"]
+                
+
+
+
+        # if max(np.random.uniform(0,1), 1 if self.optimal_action == action else 0) >= (1-self.action_epsilon):
+        #     return self.reward_type["OPT"]
         
-        return self.reward_type["OTHER"]
+        # return self.reward_type["OTHER"]
 
     def update(self, r):
         """

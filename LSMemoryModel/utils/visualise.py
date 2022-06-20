@@ -5,7 +5,7 @@ in realtime
 from lib2to3.pytree import Base
 import matplotlib.pyplot as plt
 import numpy as np
-from algos.base_algo import BaseAlgo
+from LSMemoryModel.algos.base_algo import BaseAlgo
 
 
 class Visualiser:

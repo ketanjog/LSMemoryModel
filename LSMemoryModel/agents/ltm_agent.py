@@ -2,12 +2,12 @@
 Agent that uses LTM  (slower learning process)
 """
 
-from agents.base_agent import BaseAgent
-from algos.policy_gradient import PGAlgo
+from LSMemoryModel.agents.base_agent import BaseAgent
+from LSMemoryModel.algos.policy_gradient import PGAlgo
 from typing import DefaultDict
 from collections import defaultdict
 import torch
-from utils.math import sample
+from LSMemoryModel.utils.math import sample
 
 
 class LTMAgent(BaseAgent):

@@ -1,6 +1,6 @@
 from LSMemoryModel.algos.base_algo import BaseAlgo
 import torch
-from utils.math import onehot, sample, softmax
+from LSMemoryModel.utils.math import onehot, sample, softmax
 
 
 class PGAlgo(BaseAlgo):
@@ -18,11 +18,13 @@ class PGAlgo(BaseAlgo):
         self.last_action = None
         self.beta = beta
 
-    def update(self, reward):
+    def update(self, reward, last_action):
+
         """
         Updates the weight of the chosen action
         using the exponential learning rule.
         """
+        self.last_action = last_action
 
         # Update the value function
         self.weights += (

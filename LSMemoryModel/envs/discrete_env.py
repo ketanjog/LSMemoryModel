@@ -6,7 +6,7 @@ import numpy as np
 from LSMemoryModel.data.discrete_context import get_discrete_context
 from LSMemoryModel.envs.base_env import BaseEnv
 from LSMemoryModel.algos.policy_gradient import PGAlgo
-from agents.base_agent import BaseAgent
+from LSMemoryModel.agents.base_agent import BaseAgent
 
 
 class DiscreteEnv(BaseEnv):
@@ -38,7 +38,7 @@ class DiscreteEnv(BaseEnv):
         self.cum_rewards = [0]
         self.t = 0
 
-        self.reward_type = {"OPT": 1, "OTHER": -1}
+        self.reward_type = {"OPT": 1, "OTHER": 0}
 
     def reset_context(self):
         """

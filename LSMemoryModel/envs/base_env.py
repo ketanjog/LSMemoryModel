@@ -5,8 +5,8 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from agents.base_agent import BaseAgent
-from utils.visualise import Visualiser
+from LSMemoryModel.agents.base_agent import BaseAgent
+from LSMemoryModel.utils.visualise import Visualiser
 
 
 class BaseEnv:

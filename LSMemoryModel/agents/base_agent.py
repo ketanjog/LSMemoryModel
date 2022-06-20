@@ -2,7 +2,7 @@
 Base Class for the agents
 """
 
-from algos.base_algo import BaseAlgo
+from LSMemoryModel.algos.base_algo import BaseAlgo
 from typing import DefaultDict
 from collections import defaultdict
 
@@ -17,6 +17,8 @@ class BaseAgent:
 
         self.systems: DefaultDict[str, BaseAlgo] = defaultdict(BaseAlgo)
 
+        self.action = None
+
     def choose_action(self, context):
         """
         Returns the action to be taken based on the outputs
@@ -30,9 +32,8 @@ class BaseAgent:
         Updates the internal states
         of its systems
         """
-
         for name, system in self.systems.items():
-            system.update(reward)
+            system.update(reward, self.action)
 
     def reset(self):
         """

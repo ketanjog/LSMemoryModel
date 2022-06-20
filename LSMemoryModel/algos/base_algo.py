@@ -4,11 +4,12 @@ Base Class for the algorithms
 
 
 class BaseAlgo:
-    def __init__(self):
+    def __init__(self, num_actions: int):
         """
         Initialises the algorithm
         """
-        self.name = "BaseAlgo"
+        self.name: str = "BaseAlgo"
+        self.num_actions: int = num_actions
 
     def update(self, reward):
         """

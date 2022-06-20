@@ -6,16 +6,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 from agents.base_agent import BaseAgent
+from utils.visualise import Visualiser
 
 
 class BaseEnv:
     def __init__(
-        self, T: int, num_actions: int, agent: BaseAgent = None, visual: bool = False
+        self,
+        T: int,
+        num_actions: int,
+        agent: BaseAgent = None,
+        visual: bool = False,
+        system: str = None,
     ):
         """
         Initializes the environment
         """
         self.visual: bool = visual
+        self.to_visualise: str = system
         self.name: str = "BaseEnv"
         self.T: int = T
         self.num_actions: int = num_actions
@@ -45,23 +52,7 @@ class BaseEnv:
         Trains the algorithm
         """
         if self.visual:
-            # TODO: Port to utils
-            x = np.linspace(0, self.num_actions, self.num_actions)
-            y = self.algo.action_probs
-            # to run GUI event loop
-            plt.ion()
-
-            # here we are creating sub plots
-            figure, ax = plt.subplots(figsize=(10, 8))
-            (line1,) = ax.plot(x, y)
-
-            # setting title
-            plt.title("Probabilities Over Actions", fontsize=20)
-
-            # setting x-axis label and y-axis label
-            plt.xlabel("Actions")
-            plt.ylabel("Probability")
-            plt.show(block=False)
+            visualiser = Visualiser(algo=self.agent.systems[self.to_visualise])
 
         pbar = tqdm(total=self.T)
 
@@ -86,17 +77,4 @@ class BaseEnv:
 
             # If visual, show the action probabilities of the agent
             if self.visual:
-
-                # updating data values
-                line1.set_xdata(x)
-                new_y = self.algo.action_probs
-                line1.set_ydata(new_y)
-                ax.relim()
-                ax.autoscale_view(True, True, True)
-
-                # drawing updated values
-                figure.canvas.draw()
-                figure.canvas.flush_events()
-
-                # Pause is needed to render the image
-                plt.pause(0.05)
+                visualiser.render()

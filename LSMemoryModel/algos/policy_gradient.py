@@ -10,7 +10,7 @@ class PGAlgo(BaseAlgo):
         self.name = "policy_gradient"
 
         # Short Term Memory Weights (Try random seeding)
-        self.weights = torch.ones(self.num_actions)
+        self.weights = torch.zeros(self.num_actions)
 
         # STM Learning Rate
         self.learning_rate = learning_rate

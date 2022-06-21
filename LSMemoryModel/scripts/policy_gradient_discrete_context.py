@@ -2,10 +2,10 @@ from LSMemoryModel.envs.discrete_env import DiscreteEnv
 from LSMemoryModel.agents.ltm_agent import LTMAgent
 
 # Constants for the Environment
-T = 5000
+T = 100000
 
 num_contexts = 5
-num_actions = 100
+num_actions = 1000
 
 context_epsilon = 0.01
 action_positive_epsilon = 0.01
@@ -16,8 +16,8 @@ stm_learning_rate = 0.5
 learning_rate_ratio = 0.1
 ltm_learning_rate = learning_rate_ratio * stm_learning_rate
 
-stm_beta = 1
-ltm_beta = 5
+stm_beta = 100
+ltm_beta = 10
 
 agent = LTMAgent(
     stm_learning_rate=stm_learning_rate,

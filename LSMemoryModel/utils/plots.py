@@ -228,7 +228,7 @@ def plot_ci_ltm_run(
         beta_ltm=beta_ltm,
     )
     # Set Y_label, name and other figure constants
-    y_label = "Total Rewards"
+    y_label = "Rewards / Time"
     name = title
     ci = (0.95,)
     figsize = (10, 10)

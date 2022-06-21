@@ -18,7 +18,7 @@ context_epsilon_params = [0.01]
 action_epsilon_positive_params = [0.01]
 action_epsilon_negative_params = [0.01]
 
-# num_actions_params = [100, 500, 1000, 2000, 5000, 10000]
+# num_actions_params = [100, 500, 1000, 5000]
 num_actions_params = [sys.argv[1]]
 num_contexts_params = [10]
 

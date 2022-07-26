@@ -17,15 +17,15 @@ TIME = 100000
 
 # Values swept over:
 sweep = {
-    "stm_learning_rate": [0.5],
-    "ltm_learning_rate": [0.0, 0.01, 0.1],
+    "stm_learning_rate": [0.0001, 0.001, 0.01, 0.1, 0.2, 0.5],
+    "ltm_learning_rate": [0.001, 0.01, 0.1, 0.0],
     "num_contexts": [10],
     "num_actions": [100, 500, 1000, 5000],
     "context_epsilon": [0.01],
     "action_epsilon_positive": [0.01],
     "action_epsilon_negative": [0.01],
     "beta_stm": [10, 50, 100],
-    "beta_ltm_params": [10, 50, 100],
+    "beta_ltm": [10, 50, 100],
 }
 
 # Short hand for title
@@ -205,6 +205,7 @@ def plot_ci_ltm_run(
     beta_ltm=None,
     save=False,
     folder=None,
+    _title=None,
 ):
     """
     Makes a plot of the lines with confidence intervals.
@@ -229,7 +230,8 @@ def plot_ci_ltm_run(
     )
     # Set Y_label, name and other figure constants
     y_label = "Rewards / Time"
-    name = title
+
+    name = _title if _title else title
     ci = (0.95,)
     figsize = (10, 10)
     x_axis = np.arange(0, len(runs.items()) + 1, 1)
@@ -332,19 +334,51 @@ def load_set_ltm(
         #     return 0
 
         # Get the name of the argument that is unspecified, and iterate over its swept values
-        iterable = list(title_vars_full.keys())[list(locals().values()).index(None)]
+        iterable = list(title_vars_full.keys())[
+            list(title_vars_full.values()).index(None)
+        ]
+
+        # print(iterable)
 
         sweep_vals = []
+        ltm_vals = []
         if iterable == "ltm_learning_rate":
             sweep_vals = [stm_learning_rate * i for i in sweep["ltm_learning_rate"]]
+        elif iterable == "stm_learning_rate":
+            ltm_vals = [i * ltm_learning_rate for i in sweep["stm_learning_rate"]]
+            print(ltm_vals)
+            sweep_vals = sweep[iterable]
         else:
             sweep_vals = sweep[iterable]
 
-        for param in sweep_vals:
+        for __, param in enumerate(sweep_vals):
+
             # Construct filename and load data from it
-            file_name = (
-                "_".join([str(param) if _ is None else str(_) for _ in params]) + ".pkl"
-            )
+            # file_name = (
+            #     "_".join([str(param) if _ is None else str(_) for _ in params]) + ".pkl"
+            # )
+
+            file_name = ""
+
+            for _, i in enumerate(params):
+                if _ == 1:
+                    i = ltm_vals[__]
+                if i is None:
+                    i = param
+                file_name += str(i)
+
+                if _ != len(params) - 1:
+                    file_name += "_"
+                else:
+                    file_name += ".pkl"
+            print(file_name)
+
             data[file_name] = load_object(file_name)
 
         return data, iterable, title
+
+
+def load_files_in_dict(files):
+    data = {}
+    for file_name in files:
+        data[file_name] = load_object(file_name)

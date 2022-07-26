@@ -23,6 +23,12 @@ class BaseAlgo:
         """
         raise NotImplementedError
 
+    def current_values(self):
+        """
+        Returns the action values
+        """
+        raise NotImplementedError
+
     def reset(self):
         """
         resets algorithms internal state

@@ -19,7 +19,7 @@ class BaseAgent:
 
         self.action = None
 
-    def choose_action(self, context):
+    def choose_action(self):
         """
         Returns the action to be taken based on the outputs
         of its systems

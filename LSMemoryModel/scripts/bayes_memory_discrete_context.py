@@ -1,32 +1,26 @@
+from torch import threshold
 from LSMemoryModel.envs.discrete_env import DiscreteEnv
-from LSMemoryModel.agents.ltm_agent import LTMAgent
+from LSMemoryModel.agents.bayes_agent import BayesAgent
 
 # Constants for the Environment
-T = 20000
+T = 2000
 
 num_contexts = 10
 num_actions = 100
 
 context_epsilon = 0.01
 action_positive_epsilon = 0.01
-action_negative_epsilon = 0.01
+action_negative_epsilon = 0
 
 
+# Constants for Algo
 stm_learning_rate = 0.5
-learning_rate_ratio = 0.0
-ltm_learning_rate = learning_rate_ratio * stm_learning_rate
+threshold = 1
 
-stm_beta = 10
-ltm_beta = 10
 
-agent = LTMAgent(
-    stm_learning_rate=stm_learning_rate,
-    ltm_learning_rate=ltm_learning_rate,
-    stm_beta=stm_beta,
-    ltm_beta=ltm_beta,
-    num_actions=num_actions,
+agent = BayesAgent(
+    num_actions=num_actions, stm_learning_rate=stm_learning_rate, threshold=threshold
 )
-
 
 env = DiscreteEnv(
     T=T,
@@ -39,3 +33,9 @@ env = DiscreteEnv(
     visual=False,
 )
 env.train()
+
+
+for _, i in agent.systems["LTM"].context_values.items():
+    print(i["mean"])
+
+print(len(agent.systems["LTM"].context_values))

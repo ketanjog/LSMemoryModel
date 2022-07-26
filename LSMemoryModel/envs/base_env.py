@@ -56,11 +56,11 @@ class BaseEnv:
 
         pbar = tqdm(total=self.T)
 
-        # Rum the environment for T rounds
+        # Run the environment for T rounds
         for _ in range(self.T):
 
-            # Provide context to the agent. Collect its action
-            action = self.agent.choose_action(self.context)
+            # Collect agent's action
+            action = self.agent.choose_action()
 
             # Perform the action in the environment, get reward
             r = self.step(action)
@@ -74,6 +74,9 @@ class BaseEnv:
             # print the reward
             pbar.set_description(f"Reward/time: {self.cum_rewards[-1]/self.t:.2f}")
             pbar.update(1)
+
+            # if _ % 100 == 0:
+            #     print(self.agent.dissimilarity_index)
 
             # If visual, show the action probabilities of the agent
             if self.visual:

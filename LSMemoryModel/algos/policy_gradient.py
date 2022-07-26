@@ -35,3 +35,6 @@ class PGAlgo(BaseAlgo):
 
     def current_policy(self):
         return softmax(self.weights, self.beta)
+
+    def current_values(self):
+        return self.weights

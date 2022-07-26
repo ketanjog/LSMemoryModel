@@ -1,5 +1,8 @@
 """
-Agent that uses LTM  (slower learning process)
+Implementation of a bayesian learning model, 
+
+as described in https://doi.org/10.1098/rsif.2013.0069
+
 """
 
 from LSMemoryModel.agents.base_agent import BaseAgent
@@ -10,14 +13,16 @@ import torch
 from LSMemoryModel.utils.math import sample
 
 
-class LTMAgent(BaseAgent):
+class LoydAgent(BaseAgent):
     def __init__(
         self,
-        stm_learning_rate,
-        ltm_learning_rate,
-        stm_beta,
-        ltm_beta,
         num_actions,
+        m_0=0,
+        k_0=1,
+        A_0=1,
+        B_0=1,
+        context_epsilon=0.075,
+        crp_alpha=1,
         run_id=None,
     ):
         super().__init__(run_id)
